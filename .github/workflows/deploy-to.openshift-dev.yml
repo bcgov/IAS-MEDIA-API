@@ -6,13 +6,12 @@ env:
   # To get a permanent token, refer to https://github.com/redhat-actions/oc-login/wiki/Using-a-Service-Account-for-GitHub-Actions
   OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
   OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
-  OPENSHIFT_NAMESPACE_DEV: ${{ secrets.PEN_NAMESPACE_NO_ENV }}-dev
+  OPENSHIFT_NAMESPACE_DEV: ${{ secrets.NAMESPACE_NO_ENV }}-dev
 
-  SPLUNK_TOKEN: ${{ secrets.SPLUNK_TOKEN }}
-  CDOGS_CLIENT_ID: ${{ secrets.CDOGS_CLIENT_ID }}
-  CDOGS_CLIENT_SECRET: ${{ secrets.CDOGS_CLIENT_SECRET }}
-  CDOGS_TOKEN_ENDPOINT: ${{ secrets.CDOGS_TOKEN_ENDPOINT }}
-  CDOGS_BASE_URL: ${{ secrets.CDOGS_BASE_URL }}
+  IAS_TOKEN_ENDPOINT: ${{ secrets.IAS_TOKEN_ENDPOINT }}
+  IAS_CLIENT_ID: ${{ secrets.IAS_CLIENT_ID }}
+  IAS_CLIENT_SECRET: ${{ secrets.IAS_CLIENT_SECRET }}
+  IAS_JWKS_ENDPOINT: ${{ secrets.IAS_JWKS_ENDPOINT }}
 
   # 🖊️ EDIT to change the image registry settings.
   # Registries such as GHCR, Quay.io, and Docker Hub are supported.
@@ -23,16 +22,15 @@ env:
   # 🖊️ EDIT to specify custom tags for the container image, or default tags will be generated below.
   IMAGE_TAGS: ""
 
-  IMAGE_NAME: pen-report-generation-api-main
+  IMAGE_NAME: ias-media-api-master
   DOCKER_ARTIFACTORY_REPO: artifacts.developer.gov.bc.ca/docker-remote
   ARTIFACTORY_REPO: artifacts.developer.gov.bc.ca
 
-  APP_NAME: "pen-report-generation-api"
-  REPO_NAME: "educ-pen-report-generation-api"
-  BRANCH: "main"
-  APP_NAME_FULL: "pen-report-generation-api-main"
-  NAMESPACE: ${{ secrets.PEN_NAMESPACE_NO_ENV }}
-  COMMON_NAMESPACE: ${{ secrets.COMMON_NAMESPACE_NO_ENV }}
+  APP_NAME: "ias-media-api"
+  REPO_NAME: "ias-media-api"
+  BRANCH: "master"
+  APP_NAME_FULL: "ias-media-api-master"
+  NAMESPACE: ${{ secrets.NAMESPACE_NO_ENV }}
   TAG: "latest"
   MIN_REPLICAS_DEV: "1"
   MAX_REPLICAS_DEV: "2"
@@ -44,7 +42,7 @@ env:
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -156,8 +154,8 @@ jobs:
           # Process and apply deployment template
           oc process -f tools/openshift/api.deployment.yaml -p APP_NAME=${{ env.APP_NAME }} -p REPO_NAME=${{ env.REPO_NAME }} -p BRANCH=${{ env.BRANCH }} -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE_DEV }} -p TAG=${{ env.TAG }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS_DEV }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS_DEV }} -p MIN_CPU=${{ env.MIN_CPU }} -p MAX_CPU=${{ env.MAX_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }} \
           | oc apply -f -
-  
-          curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/main/tools/config/update-configmap.sh | bash /dev/stdin dev ${{ env.APP_NAME }} ${{ env.NAMESPACE }} ${{ env.COMMON_NAMESPACE }} ${{ env.SPLUNK_TOKEN }} ${{ env.CDOGS_CLIENT_ID }} ${{ env.CDOGS_CLIENT_SECRET }} ${{ env.CDOGS_TOKEN_ENDPOINT }} ${{ env.CDOGS_BASE_URL }}
+
+          curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/main/tools/config/update-configmap.sh | bash /dev/stdin dev ${{ env.APP_NAME }} ${{ env.NAMESPACE }} ${{ env.IAS_TOKEN_ENDPOINT }} ${{ env.IAS_CLIENT_ID }} ${{ env.IAS_CLIENT_SECRET }} ${{ env.IAS_JWKS_ENDPOINT }}
           
           # Start rollout (if necessary) and follow it
           oc rollout restart deployment/${{ env.IMAGE_NAME }} 2> /dev/null \
