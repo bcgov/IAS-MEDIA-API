@@ -1,0 +1,11 @@
+{
+  "server": {
+    "logLevel": "silly",
+    "morganFormat": "dev",
+    "port": "3000",
+    "bodyLimit": "50MB"
+  },
+  "oidc": {
+    "jwksUrl": "http://test"
+  }
+}
