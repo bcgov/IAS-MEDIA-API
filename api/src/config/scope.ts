@@ -1,0 +1,3 @@
+export const SCOPE = {
+  PROCESS_IAS_MEDIA_ITEM: 'PROCESS_IAS_MEDIA_ITEM',
+};
