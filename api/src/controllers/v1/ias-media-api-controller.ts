@@ -9,7 +9,7 @@ import {AxiosResponse} from 'axios';
 import {injectable} from 'inversify';
 import {IIasMediaApiController} from './interfaces/i-ias-media-api-controller';
 import {AuthHandler} from '../../middleware/auth-handler';
-import {IasMediaItem} from "../../struct/v1/ias-media-item";
+import {IasMediaItem} from '../../struct/v1/ias-media-item';
 
 @injectable()
 export class IasMediaApiController implements IIasMediaApiController {

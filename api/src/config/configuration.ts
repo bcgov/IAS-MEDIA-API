@@ -15,10 +15,10 @@ export class Configuration {
         logLevel: process.env.LOG_LEVEL,
         morganFormat: 'dev',
         port: '3000',
-        bodyLimit: process.env.BODY_LIMIT,
+        bodyLimit: process.env.BODY_LIMIT
       },
       oidc: {
-        jwksUrl: process.env.JWKS_URL,
+        jwksUrl: process.env.JWKS_URL
       }
     });
   }

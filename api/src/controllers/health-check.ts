@@ -17,7 +17,7 @@ export class HealthCheckController implements IHealthCheckController {
   }
 
   private healthCheck(_req: Request, res: Response): void {
-      res.sendStatus(200);
+    res.sendStatus(200);
   }
 }
 
