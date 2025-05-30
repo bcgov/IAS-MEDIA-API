@@ -11,7 +11,7 @@ import log from '../components/logger';
 export class IasMediaService implements IIasMediaService {
 
   public processMediaItem(iasMediaItem: IasMediaItem): Promise<AxiosResponse<any>> {
-    log.info('Processing record! Hello world.' + iasMediaItem);
+    log.info('Processing record! Hello world.' + JSON.stringify(iasMediaItem));
     throw new Error('Method not implemented.');
   }
 
