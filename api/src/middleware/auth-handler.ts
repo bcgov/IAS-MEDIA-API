@@ -3,11 +3,11 @@ import {createRemoteJWKSet, jwtVerify, JWTVerifyResult, GetKeyFunction, JWSHeade
 import {NextFunction, Request, Response} from 'express';
 import {constants} from 'http2';
 import logger from '../components/logger';
-import {CONFIG_ELEMENT} from '../config/config-element';
 import axios, {AxiosResponse} from 'axios';
 import qs from 'querystring';
 import {injectable} from 'inversify';
 import {IAuthHandler} from './interfaces/i-auth-handler';
+import {CONFIG_ELEMENT} from '../config/config-element';
 
 @injectable()
 export class AuthHandler implements IAuthHandler {

@@ -5,7 +5,7 @@
   "repository": "https://github.com/bcgov/IAS-MEDIA-API",
   "license": "Apache-2.0",
   "authors": [
-    "EDUC-PEN-TEAM"
+    "CITZ"
   ],
   "scripts": {
     "build": "ts-node build.ts",
