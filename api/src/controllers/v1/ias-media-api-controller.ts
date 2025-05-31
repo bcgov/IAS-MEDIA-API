@@ -5,7 +5,6 @@ import {plainToClass} from 'class-transformer';
 import {validate, ValidationError} from 'class-validator';
 import {IasMediaService} from '../../service/ias-media-service';
 import {SCOPE} from '../../config/scope';
-import {AxiosResponse} from 'axios';
 import {injectable} from 'inversify';
 import {IIasMediaApiController} from './interfaces/i-ias-media-api-controller';
 import {AuthHandler} from '../../middleware/auth-handler';
@@ -36,13 +35,8 @@ export class IasMediaApiController implements IIasMediaApiController {
       return;
     } else {
       try {
-        const mediaItemResponse: AxiosResponse = await this._iasMediaService.processMediaItem(iasMediaItem);
-        logger.info('Received response status', mediaItemResponse?.status);
-        logger.info('Received response headers', mediaItemResponse?.headers);
-        ['Content-Disposition', 'Content-Type', 'Content-Length', 'Content-Transfer-Encoding', 'X-Report-Name'].forEach(h => {
-          res.setHeader(h, mediaItemResponse.headers[h.toLowerCase()]);
-        });
-        res.send(mediaItemResponse.data);
+        await this._iasMediaService.processMediaItem(iasMediaItem);
+        res.sendStatus(constants.HTTP_STATUS_ACCEPTED);
         return;
       } catch (e) {
         logger.error(e);
