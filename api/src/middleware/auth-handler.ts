@@ -1,5 +1,5 @@
 import {Configuration} from '../config/configuration';
-import * as jose from 'jose';
+import {createRemoteJWKSet, jwtVerify, JWTVerifyResult, GetKeyFunction, JWSHeaderParameters, FlattenedJWSInput} from 'jose';
 import {NextFunction, Request, Response} from 'express';
 import {constants} from 'http2';
 import logger from '../components/logger';
@@ -12,10 +12,10 @@ import {IAuthHandler} from './interfaces/i-auth-handler';
 @injectable()
 export class AuthHandler implements IAuthHandler {
 
-  private readonly _JWKS: jose.GetKeyFunction<jose.JWSHeaderParameters, jose.FlattenedJWSInput>;
+  private readonly _JWKS: GetKeyFunction<JWSHeaderParameters, FlattenedJWSInput>;
 
   public constructor() {
-    this._JWKS = jose.createRemoteJWKSet(new URL(Configuration.getConfig(CONFIG_ELEMENT.OIDC_JWKS_URL)));
+    this._JWKS = createRemoteJWKSet(new URL(Configuration.getConfig(CONFIG_ELEMENT.OIDC_JWKS_URL)));
   }
 
   public  validateScope(scope: string): (req: Request, res: Response, next: NextFunction) => Promise<void> {
@@ -24,7 +24,7 @@ export class AuthHandler implements IAuthHandler {
         const tokenString = req.headers.authorization.split(' ')[1];
         logger.silly('token', tokenString);
         try {
-          const jwtVerifyResult: jose.JWTVerifyResult = await jose.jwtVerify(tokenString, this._JWKS);
+          const jwtVerifyResult: JWTVerifyResult = await jwtVerify(tokenString, this._JWKS);
           const scopes: string[] = jwtVerifyResult?.payload?.scope?.split(' ');
           if (scopes && scopes.includes(scope)) {
             next();
