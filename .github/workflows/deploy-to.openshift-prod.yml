@@ -33,7 +33,6 @@ env:
   MIN_REPLICAS: "3"
   MAX_REPLICAS: "4"
   MIN_CPU: "15m"
-  MAX_CPU: "80m"
   MIN_MEM: "200Mi"
   MAX_MEM: "400Mi"
 
@@ -118,7 +117,7 @@ jobs:
           oc tag ${{ env.NAMESPACE }}-test/${{ env.REPO_NAME }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }} ${{ env.NAMESPACE }}-prod/${{ env.REPO_NAME }}-${{ env.BRANCH }}:${{ steps.get-latest-tag.outputs.tag }}
           
           # Process and apply deployment template
-          oc process -f tools/openshift/api.deployment.yaml -p APP_NAME=${{ env.APP_NAME }} -p REPO_NAME=${{ env.REPO_NAME }} -p BRANCH=${{ env.BRANCH }} -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p TAG=${{ steps.get-latest-tag.outputs.tag }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} -p MIN_CPU=${{ env.MIN_CPU }} -p MAX_CPU=${{ env.MAX_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }} \
+          oc process -f tools/openshift/api.deployment.yaml -p APP_NAME=${{ env.APP_NAME }} -p REPO_NAME=${{ env.REPO_NAME }} -p BRANCH=${{ env.BRANCH }} -p NAMESPACE=${{ env.OPENSHIFT_NAMESPACE }} -p TAG=${{ steps.get-latest-tag.outputs.tag }} -p MIN_REPLICAS=${{ env.MIN_REPLICAS }} -p MAX_REPLICAS=${{ env.MAX_REPLICAS }} -p MIN_CPU=${{ env.MIN_CPU }} -p MIN_MEM=${{ env.MIN_MEM }} -p MAX_MEM=${{ env.MAX_MEM }} \
           | oc apply -f -
           
           curl -s https://raw.githubusercontent.com/bcgov/${{ env.REPO_NAME }}/${{ steps.get-latest-tag.outputs.tag }}/tools/config/update-configmap.sh | bash /dev/stdin ${{ env.TARGET_ENV }} ${{ env.APP_NAME }} ${{ env.NAMESPACE }} ${{ env.COMMON_NAMESPACE }} ${{ env.SPLUNK_TOKEN }} ${{ env.CDOGS_CLIENT_ID }} ${{ env.CDOGS_CLIENT_SECRET }} ${{ env.CDOGS_TOKEN_ENDPOINT }} ${{ env.CDOGS_BASE_URL }}

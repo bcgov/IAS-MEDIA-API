@@ -73,7 +73,6 @@ objects:
               cpu: "${MIN_CPU}"
               memory: "${MIN_MEM}"
             limits:
-              cpu: "${MAX_CPU}"
               memory: "${MAX_MEM}"
         volumes:
         - name: log-storage
@@ -106,6 +105,29 @@ objects:
       targetPort: 443
     selector:
       app: "${APP_NAME}-${BRANCH}"
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      haproxy.router.openshift.io/balance: roundrobin
+      haproxy.router.openshift.io/disable_cookies: 'true'
+      haproxy.router.openshift.io/timeout: 120s
+      openshift.io/host.generated: 'true'
+    labels:
+      app: "${APP_NAME}-${BRANCH}"
+    name: "${APP_NAME}-${BRANCH}"
+  spec:
+    host: "${HOST_ROUTE}"
+    port:
+      targetPort: 3000-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: "${APP_NAME}-${BRANCH}"
+      weight: 100
+    wildcardPolicy: None
 - apiVersion: autoscaling/v2
   kind: HorizontalPodAutoscaler
   metadata:
@@ -114,7 +136,7 @@ objects:
     scaleTargetRef:
       apiVersion: apps/v1
       kind: Deployment
-      name: "${APP_NAME}-backend-${BRANCH}"
+      name: "${APP_NAME}-${BRANCH}"
       subresource: scale
     minReplicas: ${{MIN_REPLICAS}}
     maxReplicas: ${{MAX_REPLICAS}}
@@ -152,9 +174,6 @@ parameters:
   required: true
 - name: MIN_CPU
   description: The minimum amount of cpu
-  required: true
-- name: MAX_CPU
-  description: The maximum amount of cpu
   required: true
 - name: MIN_MEM
   description: The minimum amount of memory
