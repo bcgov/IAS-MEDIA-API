@@ -38,7 +38,7 @@ env:
   MIN_MEM: "400Mi"
   MAX_MEM: "600Mi"
 
-  HOST_ROUTE: "ias-media-api"
+  HOST_ROUTE: ${{ secrets.HOST_ROUTE }}
 
 on:
   push:
