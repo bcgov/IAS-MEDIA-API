@@ -14,10 +14,10 @@ export class S3ConnectorService implements IS3ConnectorService {
   public async downloadFileFromBucket(key: string): Promise<Readable | null> {
     try {
       const s3 = new S3Client({
-        region: "your-region",
+        region: Configuration.getConfig(CONFIG_ELEMENT.S3_REGION),
         credentials: {
-          accessKeyId: Configuration.getConfig(CONFIG_ELEMENT.S3_ACCESS_KEY_ID), // Replace with your access key ID
-          secretAccessKey: Configuration.getConfig(CONFIG_ELEMENT.S3_SECRET_ACCESS_KEY), // Replace with your secret access key
+          accessKeyId: Configuration.getConfig(CONFIG_ELEMENT.S3_ACCESS_KEY_ID),
+          secretAccessKey: Configuration.getConfig(CONFIG_ELEMENT.S3_SECRET_ACCESS_KEY),
         }
       });
 
@@ -39,10 +39,10 @@ export class S3ConnectorService implements IS3ConnectorService {
 
   public async uploadFileToS3(key: string, newVideoBuffer: Buffer): Promise<PutObjectCommandOutput> {
     const client = new S3Client({
-      region: "your-region", // Replace with your S3 region
+      region: Configuration.getConfig(CONFIG_ELEMENT.S3_REGION),
       credentials: {
-        accessKeyId: Configuration.getConfig(CONFIG_ELEMENT.S3_ACCESS_KEY_ID), // Replace with your access key ID
-        secretAccessKey: Configuration.getConfig(CONFIG_ELEMENT.S3_SECRET_ACCESS_KEY), // Replace with your secret access key
+        accessKeyId: Configuration.getConfig(CONFIG_ELEMENT.S3_ACCESS_KEY_ID),
+        secretAccessKey: Configuration.getConfig(CONFIG_ELEMENT.S3_SECRET_ACCESS_KEY),
       }
     });
 

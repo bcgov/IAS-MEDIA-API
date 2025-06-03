@@ -2,6 +2,7 @@ export const CONFIG_ELEMENT = {
   LOG_LEVEL: 'server:logLevel',
   PORT: 'server:port',
   OIDC_JWKS_URL: 'oidc:jwksUrl',
+  S3_REGION: 's3:region',
   S3_ACCESS_KEY_ID: 's3:accessKeyID',
   S3_SECRET_ACCESS_KEY: 's3:secretAccessKey',
   S3_BUCKET: 's3:bucket',

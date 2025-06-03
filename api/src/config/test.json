@@ -11,6 +11,7 @@
   "s3": {
     "accessKeyID": "123",
     "secretAccessKey": "123",
-    "bucket": "123"
+    "bucket": "123",
+    "region": "123"
   }
 }
