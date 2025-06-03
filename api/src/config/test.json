@@ -7,5 +7,10 @@
   },
   "oidc": {
     "jwksUrl": "http://test"
+  },
+  "s3": {
+    "accessKeyID": "123",
+    "secretAccessKey": "123",
+    "bucket": "123"
   }
 }

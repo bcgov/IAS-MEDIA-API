@@ -20,6 +20,11 @@ export class Configuration {
       oidc: {
         jwksUrl: process.env.JWKS_URL,
       },
+      s3: {
+        accessKeyID: process.env.S3_ACCESS_KEY_ID,
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        bucket: process.env.S3_BUCKET,
+      },
     });
   }
 

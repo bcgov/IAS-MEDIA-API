@@ -5,14 +5,10 @@ export class IasMediaItem {
 
   @IsDefined()
   @Expose()
-  public mediaQueueID: string;
+  public verificationRequestID: string;
 
   @IsDefined()
   @Expose()
-  public callbackURL: string;
-
-  @IsDefined()
-  @Expose()
-  public fileURL: string;
+  public videoKey: string;
 
 }

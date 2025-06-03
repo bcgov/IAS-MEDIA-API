@@ -13,6 +13,9 @@ import {IasMediaApiController} from './controllers/v1/ias-media-api-controller';
 import {CONFIG_ELEMENT} from './config/config-element';
 import {HealthCheckController} from './controllers/health-check';
 import {iocContainer} from './config/inversify.config';
+import ffmpegBin from 'ffmpeg-static';
+import { path as ffprobeBin } from 'ffprobe-static';
+import {FFmpeggy} from 'ffmpeggy';
 
 export class App {
   public expressApplication: express.Application;
@@ -29,6 +32,11 @@ export class App {
     this.expressApplication.use(express.json({
       limit: Configuration.getConfig(CONFIG_ELEMENT.JSON_BODY_LIMIT),
     }));
+    FFmpeggy.DefaultConfig = {
+      ...FFmpeggy.DefaultConfig,
+      ffprobeBin,
+      ffmpegBin,
+    };
     const logStream = {
       write: (message) => {
         logger.info(message);
