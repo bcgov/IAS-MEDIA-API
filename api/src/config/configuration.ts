@@ -17,8 +17,11 @@ export class Configuration {
         port: '3000',
         bodyLimit: process.env.BODY_LIMIT,
       },
-      oidc: {
-        jwksUrl: process.env.JWKS_URL,
+      ias: {
+        jwksEndpoint: process.env.IAS_JWKS_ENDPOINT,
+        clientID: process.env.IAS_CLIENT_ID,
+        clientSecret: process.env.IAS_CLIENT_SECRET,
+        tokenEndpoint: process.env.IAS_TOKEN_ENDPOINT,
       },
       s3: {
         accessKeyID: process.env.S3_ACCESS_KEY_ID,

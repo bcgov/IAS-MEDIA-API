@@ -12,7 +12,7 @@ export class AxiosHelper implements IAxiosHelper {
   }
 
   public async post(url: string, data: any, headers?: any): Promise<AxiosResponse> {
-    const apiToken: string = await this._authHandler.getCDOGsApiToken();
+    const apiToken: string = await this._authHandler.getIASApiToken();
     const config: AxiosRequestConfig = {
       timeout: 30000,
     };
@@ -29,7 +29,7 @@ export class AxiosHelper implements IAxiosHelper {
   }
 
   public  async get(url: string, headers?: any): Promise<AxiosResponse> {
-    const apiToken: string = await this._authHandler.getCDOGsApiToken();
+    const apiToken: string = await this._authHandler.getIASApiToken();
     const config: AxiosRequestConfig = {
       timeout: 30000,
     };

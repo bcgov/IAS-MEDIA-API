@@ -19,7 +19,7 @@ export class IasMediaService implements IIasMediaService {
 
   public async processMediaItem(iasMediaItem: IasMediaItem): Promise<void> {
     log.info('Processing media item: ' + JSON.stringify(iasMediaItem));
-    let fileBuffer = await this._s3ConnectorService.downloadFileFromBucket('ABC', iasMediaItem.videoKey);
+    let fileBuffer = await this._s3ConnectorService.downloadFileFromBucket(iasMediaItem.videoKey);
     let probeResult = await this.probeMediaItem(fileBuffer);
     log.info('Probe result is: ' + JSON.stringify(probeResult));
 

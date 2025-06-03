@@ -15,7 +15,7 @@ export class AuthHandler implements IAuthHandler {
   private readonly _JWKS: jose.GetKeyFunction<jose.JWSHeaderParameters, jose.FlattenedJWSInput>;
 
   public constructor() {
-    this._JWKS = jose.createRemoteJWKSet(new URL(Configuration.getConfig(CONFIG_ELEMENT.OIDC_JWKS_URL)));
+    this._JWKS = jose.createRemoteJWKSet(new URL(Configuration.getConfig(CONFIG_ELEMENT.IAS_JWKS_ENDPOINT)));
   }
 
   public  validateScope(scope: string): (req: Request, res: Response, next: NextFunction) => Promise<void> {
@@ -44,14 +44,14 @@ export class AuthHandler implements IAuthHandler {
   }
 
   /**
-   * this function returns access token to call CDOGS API
+   * this function returns access token to call IAS API
    */
-  public  async getCDOGsApiToken(): Promise<string> {
+  public async getIASApiToken(): Promise<string> {
     try {
-      const response: AxiosResponse = await axios.post(Configuration.getConfig(CONFIG_ELEMENT.CDOGS_TOKEN_ENDPOINT),
+      const response: AxiosResponse = await axios.post(Configuration.getConfig(CONFIG_ELEMENT.IAS_TOKEN_ENDPOINT),
         qs.stringify({
-          client_id: Configuration.getConfig(CONFIG_ELEMENT.CDOGS_CLIENT_ID),
-          client_secret: Configuration.getConfig(CONFIG_ELEMENT.CDOGS_CLIENT_SECRET),
+          client_id: Configuration.getConfig(CONFIG_ELEMENT.IAS_CLIENT_ID),
+          client_secret: Configuration.getConfig(CONFIG_ELEMENT.IAS_CLIENT_SECRET),
           grant_type: 'client_credentials',
         }), {
           headers: {
@@ -61,7 +61,7 @@ export class AuthHandler implements IAuthHandler {
           },
         }
       );
-      logger.silly('getCDOGsApiToken Res', response.data);
+      logger.silly('getIASApiToken Res', response.data);
       return response?.data?.access_token;
     } catch (e) {
       logger.error(e);

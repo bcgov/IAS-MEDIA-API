@@ -11,7 +11,7 @@ describe('Configuration', () => {
     expect(logLevel).toBe('silly');
   });
   test('oidc jwks-url', () => {
-    const value = Configuration.getConfig(CONFIG_ELEMENT.OIDC_JWKS_URL);
+    const value = Configuration.getConfig(CONFIG_ELEMENT.IAS_JWKS_ENDPOINT);
     expect(value).toBe('http://test');
   });
 });
