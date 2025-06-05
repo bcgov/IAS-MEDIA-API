@@ -9,10 +9,13 @@ import {IIasMediaApiController} from '../controllers/v1/interfaces/i-ias-media-a
 import {IHealthCheckController} from '../controllers/interfaces/i-health-check';
 import {IIasMediaService} from '../service/interfaces/i-ias-media-service';
 import {IAxiosHelper} from '../helpers/interfaces/i-axios-helper';
+import {IS3ConnectorService} from '../service/interfaces/i-s3-connector-service';
+import {S3ConnectorService} from '../service/s3-connector-service';
 
 const iocContainer = new Container();
 iocContainer.bind<IAuthHandler>(AuthHandler).toSelf().inSingletonScope();
 iocContainer.bind<IIasMediaService>(IasMediaService).toSelf().inSingletonScope();
+iocContainer.bind<IS3ConnectorService>(S3ConnectorService).toSelf().inSingletonScope();
 iocContainer.bind<IHealthCheckController>(HealthCheckController).toSelf().inSingletonScope();
 iocContainer.bind<IIasMediaApiController>(IasMediaApiController).toSelf().inSingletonScope();
 iocContainer.bind<IAxiosHelper>(AxiosHelper).toSelf().inSingletonScope();

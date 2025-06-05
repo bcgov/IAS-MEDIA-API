@@ -16,6 +16,7 @@ import {iocContainer} from './config/inversify.config';
 import ffmpegBin from 'ffmpeg-static';
 import { path as ffprobeBin } from 'ffprobe-static';
 import {FFmpeggy} from 'ffmpeggy';
+import * as tmp from 'tmp';
 
 export class App {
   public expressApplication: express.Application;
@@ -42,6 +43,7 @@ export class App {
         logger.info(message);
       },
     };
+    tmp.setGracefulCleanup();
     const healthCheckController = iocContainer.resolve(HealthCheckController);
     this.expressApplication.use(healthCheckController.Router);
     this.expressApplication.use(morgan(Configuration.getConfig(CONFIG_ELEMENT.MORGAN_FORMAT), {'stream': logStream}));

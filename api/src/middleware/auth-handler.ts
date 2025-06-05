@@ -18,7 +18,7 @@ export class AuthHandler implements IAuthHandler {
     this._JWKS = jose.createRemoteJWKSet(new URL(Configuration.getConfig(CONFIG_ELEMENT.IAS_JWKS_ENDPOINT)));
   }
 
-  public  validateScope(scope: string): (req: Request, res: Response, next: NextFunction) => Promise<void> {
+  public validateScope(scope: string): (req: Request, res: Response, next: NextFunction) => Promise<void> {
     return async (req: Request, res: Response, next: NextFunction) => {
       if (req?.headers.authorization) {
         const tokenString = req.headers.authorization.split(' ')[1];
