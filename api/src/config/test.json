@@ -5,8 +5,11 @@
     "port": "3000",
     "bodyLimit": "50MB"
   },
-  "oidc": {
-    "jwksUrl": "http://test"
+  "ias": {
+    "jwksEndpoint": "http://test",
+    "clientID": "abc",
+    "clientSecret": "abc",
+    "tokenEndpoint": "http://test"
   },
   "s3": {
     "accessKeyID": "123",
