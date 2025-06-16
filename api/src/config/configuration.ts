@@ -28,6 +28,7 @@ export class Configuration {
         secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
         bucket: process.env.S3_BUCKET,
         region: process.env.S3_REGION,
+        endpoint: process.env.S3_ENDPOINT,
       },
     });
   }

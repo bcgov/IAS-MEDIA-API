@@ -2,7 +2,6 @@ import {App} from './app';
 import {Configuration} from './config/configuration';
 import http, {Server} from 'http';
 import log from './components/logger';
-import logger from './components/logger';
 import * as jsJoda from '@js-joda/core';
 import {CONFIG_ELEMENT} from './config/config-element';
 // Add timestamp to log
@@ -18,7 +17,7 @@ class IasMediaApiApplication {
   private readonly _httpServer: Server;
 
   private constructor() {
-    log.debug('Starting IAS Media API node app');
+    console.debug('Starting IAS Media API node app');
     this._app = new App();
     this._port = IasMediaApiApplication.normalizePort(Configuration.getConfig(CONFIG_ELEMENT.PORT));
     this._app.expressApplication.set('port', this._port);
@@ -71,11 +70,11 @@ class IasMediaApiApplication {
     // handle specific listen errors with friendly messages
     switch (error?.code) {
     case 'EACCES':
-      log.error(`${iasMediaApiApplication.port} requires elevated privileges`);
+      console.error(`${iasMediaApiApplication.port} requires elevated privileges`);
       // process.exit(1);
       break;
     case 'EADDRINUSE':
-      log.error(`${iasMediaApiApplication.port} is already in use`);
+      console.error(`${iasMediaApiApplication.port} is already in use`);
       // process.exit(1);
       break;
     default:
@@ -91,7 +90,7 @@ class IasMediaApiApplication {
     const bind = typeof addr === 'string' ?
       `pipe  ${addr}` :
       `port  ${addr.port}`;
-    log.info('Listening on ' + bind);
+    console.info('Listening on ' + bind);
   }
 }
 
@@ -100,19 +99,19 @@ export const iasMediaApiApplication = IasMediaApiApplication.start();
 
 process.on('SIGINT', () => {
   iasMediaApiApplication.httpServer.close(() => {
-    log.info('process terminated');
+    console.info('process terminated');
   });
 });
 process.on('SIGTERM', () => {
   iasMediaApiApplication.httpServer.close(() => {
-    log.info('process terminated');
+    console.info('process terminated');
   });
 });
 // Prevent unhandled rejection from crashing application
 process.on('unhandledRejection', err => {
-  logger.error('Error is ', err);
+  console.error('Error is ', err);
 });
 // Prevent unhandled errors from crashing application
 process.on('error', err => {
-  logger.error('Error is ', err);
+  console.error('Error is ', err);
 });

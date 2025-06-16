@@ -6,6 +6,7 @@ export const CONFIG_ELEMENT = {
   IAS_CLIENT_SECRET: 'ias:clientSecret',
   IAS_JWKS_ENDPOINT: 'ias:jwksEndpoint',
   S3_REGION: 's3:region',
+  S3_ENDPOINT: 's3:endpoint',
   S3_ACCESS_KEY_ID: 's3:accessKeyID',
   S3_SECRET_ACCESS_KEY: 's3:secretAccessKey',
   S3_BUCKET: 's3:bucket',
