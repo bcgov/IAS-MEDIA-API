@@ -14,7 +14,7 @@ import fs from 'fs-extra';
 @injectable()
 export class S3ConnectorService implements IS3ConnectorService {
 
-  public async downloadFileFromBucket(key: string): Promise<string | null> {
+  public async downloadFileFromBucket(key: string): Promise<string | undefined> {
     try {
       const s3 = new S3({
         region: Configuration.getConfig(CONFIG_ELEMENT.S3_REGION),
@@ -23,7 +23,7 @@ export class S3ConnectorService implements IS3ConnectorService {
           accessKeyId: Configuration.getConfig(CONFIG_ELEMENT.S3_ACCESS_KEY_ID),
           secretAccessKey: Configuration.getConfig(CONFIG_ELEMENT.S3_SECRET_ACCESS_KEY),
         },
-        forcePathStyle: true
+        forcePathStyle: true,
       });
 
       const command = new GetObjectCommand({
@@ -35,12 +35,12 @@ export class S3ConnectorService implements IS3ConnectorService {
       if (response.Body instanceof Readable) {
         return await this.streamToTempFile(response.Body);
       }
-      return null;
+      return undefined;
     } catch (error) {
       console.error('Error reading video from S3:', error);
       throw error;
     }
-  };
+  }
 
   public async uploadFileToS3(key: string, newTempFile: string): Promise<CompleteMultipartUploadCommandOutput> {
     const client = new S3Client({
@@ -50,13 +50,13 @@ export class S3ConnectorService implements IS3ConnectorService {
         accessKeyId: Configuration.getConfig(CONFIG_ELEMENT.S3_ACCESS_KEY_ID),
         secretAccessKey: Configuration.getConfig(CONFIG_ELEMENT.S3_SECRET_ACCESS_KEY),
       },
-      forcePathStyle: true
+      forcePathStyle: true,
     });
 
     try {
 
       const upload = new Upload({
-        client: client,
+        client,
         params: {
           Bucket: Configuration.getConfig(CONFIG_ELEMENT.S3_BUCKET),
           Key: key,
@@ -66,10 +66,10 @@ export class S3ConnectorService implements IS3ConnectorService {
 
       return await upload.done();
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error('Error uploading file:', error);
       throw error;
     }
-  };
+  }
 
   private async streamToTempFile(stream: Readable): Promise<string> {
     return new Promise((resolve, reject) => {

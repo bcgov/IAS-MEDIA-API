@@ -3,7 +3,8 @@ import {IIasMediaService} from './interfaces/i-ias-media-service';
 import {IasMediaItem} from 'src/struct/v1/ias-media-item';
 import {FFmpeggy} from 'ffmpeggy';
 import {FFprobeResult} from 'ffmpeggy/cjs/types/probeTypes';
-import {S3ConnectorService} from "./s3-connector-service";
+import {S3ConnectorService} from './s3-connector-service';
+import log from '../components/logger';
 import fs from 'fs-extra';
 import * as tmp from 'tmp';
 import {FileResult} from 'tmp';
@@ -24,21 +25,23 @@ export class IasMediaService implements IIasMediaService {
     let newVideoFile: tmp.FileResult;
     let incomingVideoFileName;
     try{
-      console.debug('Processing media item: ' + JSON.stringify(iasMediaItem));
+      log.debug('Processing media item: ' + JSON.stringify(iasMediaItem));
 
-      console.debug('Downloading item from S3 bucket, key: ' + iasMediaItem.videoKey);
+      log.debug('Downloading item from S3 bucket, key: ' + iasMediaItem.videoKey);
       incomingVideoFileName = await this._s3ConnectorService.downloadFileFromBucket(iasMediaItem.videoKey);
 
-      let probeResult = await this.probeMediaItem(incomingVideoFileName);
-      console.debug('Probe result is: ' + JSON.stringify(probeResult));
+      if (incomingVideoFileName) {
+        const probeResult = await this.probeMediaItem(incomingVideoFileName);
+        log.debug('Probe result is: ' + JSON.stringify(probeResult));
 
-      newVideoFile = await this.runFFMpegProcessor(incomingVideoFileName);
-      await this._s3ConnectorService.uploadFileToS3(iasMediaItem.videoKey, newVideoFile.name);
-    }catch(e){
-      console.error('Error occurred while processing media item: ' + e);
-      throw 'Error occurred while processing media item: ' + e;
-    }
-    finally {
+        newVideoFile = await this.runFFMpegProcessor(incomingVideoFileName);
+        await this._s3ConnectorService.uploadFileToS3(iasMediaItem.videoKey, newVideoFile.name);
+      }
+    } catch (error) {
+      const fullError = `Error occurred while processing media item: ${error}`;
+      console.error(fullError);
+      throw error;
+    } finally {
       newVideoFile.removeCallback();
       await fs.unlink(incomingVideoFileName);
     }
@@ -47,11 +50,12 @@ export class IasMediaService implements IIasMediaService {
   private async probeMediaItem(vidString: string): Promise<FFprobeResult> {
     try{
       const ffmpeggy = new FFmpeggy({
-        input: vidString
+        input: vidString,
       });
       return await ffmpeggy.probe();
-    } catch(error) {
-      console.error(`Something went wrong probing the video: ` + error);
+    } catch (error) {
+      const fullError = `Something went wrong probing the video: ${error}`;
+      console.error(fullError);
       throw error;
     }
   }
@@ -63,14 +67,15 @@ export class IasMediaService implements IIasMediaService {
       const ffmpeggy = new FFmpeggy({
         input: vidString,
         output: fs.createWriteStream(tmpFile.name),
-        outputOptions: ['-f:v h264']
+        outputOptions: ['-f:v h264'],
       });
 
       await ffmpeggy.run();
-      console.debug('Processing is complete');
+      log.debug('Processing is complete');
       return tmpFile;
-    } catch(error) {
-      console.error('Something went wrong processing the video:', error);
+    } catch (error) {
+      const fullError = `Something went wrong processing the video: ${error}`;
+      console.error(fullError);
       throw error;
     }
   }

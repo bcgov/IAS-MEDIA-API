@@ -17,7 +17,7 @@ class IasMediaApiApplication {
   private readonly _httpServer: Server;
 
   private constructor() {
-    console.debug('Starting IAS Media API node app');
+    log.debug('Starting IAS Media API node app');
     this._app = new App();
     this._port = IasMediaApiApplication.normalizePort(Configuration.getConfig(CONFIG_ELEMENT.PORT));
     this._app.expressApplication.set('port', this._port);
@@ -90,7 +90,7 @@ class IasMediaApiApplication {
     const bind = typeof addr === 'string' ?
       `pipe  ${addr}` :
       `port  ${addr.port}`;
-    console.info('Listening on ' + bind);
+    log.info('Listening on ' + bind);
   }
 }
 
@@ -99,12 +99,12 @@ export const iasMediaApiApplication = IasMediaApiApplication.start();
 
 process.on('SIGINT', () => {
   iasMediaApiApplication.httpServer.close(() => {
-    console.info('process terminated');
+    log.info('process terminated');
   });
 });
 process.on('SIGTERM', () => {
   iasMediaApiApplication.httpServer.close(() => {
-    console.info('process terminated');
+    log.info('process terminated');
   });
 });
 // Prevent unhandled rejection from crashing application
