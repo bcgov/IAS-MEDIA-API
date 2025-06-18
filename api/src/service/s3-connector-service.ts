@@ -14,7 +14,7 @@ import fs from 'fs-extra';
 @injectable()
 export class S3ConnectorService implements IS3ConnectorService {
 
-  public async downloadFileFromBucket(key: string): Promise<string | undefined> {
+  public async downloadFileFromBucket(key: string): Promise<string> {
     try {
       const s3 = new S3({
         region: Configuration.getConfig(CONFIG_ELEMENT.S3_REGION),
@@ -35,7 +35,7 @@ export class S3ConnectorService implements IS3ConnectorService {
       if (response.Body instanceof Readable) {
         return await this.streamToTempFile(response.Body);
       }
-      return undefined;
+      throw new Error('Could not download file - body is not readable.');
     } catch (error) {
       console.error('Error reading video from S3:', error);
       throw error;
