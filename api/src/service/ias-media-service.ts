@@ -40,8 +40,12 @@ export class IasMediaService implements IIasMediaService {
       console.error(fullError);
       throw error;
     } finally {
-      newVideoFile.removeCallback();
-      await fs.unlink(incomingVideoFileName);
+      if(newVideoFile){
+        newVideoFile.removeCallback();
+      }
+      if(incomingVideoFileName){
+        await fs.unlink(incomingVideoFileName);
+      }
     }
   }
 
