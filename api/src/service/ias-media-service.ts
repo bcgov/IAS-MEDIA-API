@@ -30,6 +30,8 @@ export class IasMediaService implements IIasMediaService {
       log.debug('Downloading item from S3 bucket, key: ' + iasMediaItem.videoKey);
       incomingVideoFileName = await this._s3ConnectorService.downloadFileFromBucket(iasMediaItem.videoKey);
 
+      log.debug('Incoming file temp name: ' + incomingVideoFileName);
+
       const probeResult = await this.probeMediaItem(incomingVideoFileName);
       log.debug('Probe result is: ' + JSON.stringify(probeResult));
 
