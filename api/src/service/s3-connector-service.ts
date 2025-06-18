@@ -7,6 +7,7 @@ import {CONFIG_ELEMENT} from '../config/config-element';
 import {Readable} from 'stream';
 import * as tmp from 'tmp';
 import fs from 'fs-extra';
+import {FileResult} from "tmp";
 
 /**
  * Singleton service class.
@@ -42,7 +43,7 @@ export class S3ConnectorService implements IS3ConnectorService {
     }
   }
 
-  public async uploadFileToS3(key: string, newTempFile: string): Promise<CompleteMultipartUploadCommandOutput> {
+  public async uploadFileToS3(key: string, newTempFile: FileResult): Promise<CompleteMultipartUploadCommandOutput> {
     const client = new S3Client({
       region: Configuration.getConfig(CONFIG_ELEMENT.S3_REGION),
       endpoint: Configuration.getConfig(CONFIG_ELEMENT.S3_ENDPOINT),
@@ -55,12 +56,13 @@ export class S3ConnectorService implements IS3ConnectorService {
 
     try {
 
+      const fileBuffer = await fs.readFile(newTempFile.name);
       const upload = new Upload({
         client,
         params: {
           Bucket: Configuration.getConfig(CONFIG_ELEMENT.S3_BUCKET),
           Key: key,
-          Body: Buffer.from(newTempFile),
+          Body: fileBuffer,
         },
       });
 
