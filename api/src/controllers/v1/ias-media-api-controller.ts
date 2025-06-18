@@ -35,7 +35,7 @@ export class IasMediaApiController implements IIasMediaApiController {
       return;
     } else {
       try {
-        await this._iasMediaService.processMediaItem(iasMediaItem);
+        this._iasMediaService.processMediaItem(iasMediaItem);
         res.sendStatus(constants.HTTP_STATUS_ACCEPTED);
         return;
       } catch (e) {
