@@ -1,6 +1,6 @@
-import {injectable} from 'inversify';
+import {inject, injectable} from 'inversify';
 import {IIasMediaService} from './interfaces/i-ias-media-service';
-import {IasMediaItem} from 'src/struct/v1/ias-media-item';
+import {IasMediaItem} from '../struct/v1/ias-media-item';
 import {FFmpeggy} from 'ffmpeggy';
 import {FFprobeResult} from 'ffmpeggy/cjs/types/probeTypes';
 import {S3ConnectorService} from './s3-connector-service';
@@ -8,6 +8,7 @@ import log from '../components/logger';
 import fs from 'fs-extra';
 import * as tmp from 'tmp';
 import {FileResult} from 'tmp';
+import { TYPES } from '../config/types';
 
 /**
  * Singleton service class.
@@ -17,7 +18,7 @@ export class IasMediaService implements IIasMediaService {
 
   private readonly _s3ConnectorService: S3ConnectorService;
 
-  public constructor(s3ConnectorService: S3ConnectorService) {
+  public constructor(@inject(TYPES.IS3ConnectorService) s3ConnectorService: S3ConnectorService) {
     this._s3ConnectorService = s3ConnectorService;
   }
 

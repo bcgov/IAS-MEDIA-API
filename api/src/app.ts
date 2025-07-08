@@ -12,7 +12,7 @@ import {ErrorHandlerMiddleware} from './middleware/error-handler-middleware';
 import {IasMediaApiController} from './controllers/v1/ias-media-api-controller';
 import {CONFIG_ELEMENT} from './config/config-element';
 import {HealthCheckController} from './controllers/health-check';
-import {iocContainer} from './config/inversify.config';
+import {iocContainer} from './config/ioc';
 import ffmpegBin from 'ffmpeg-static';
 import { path as ffprobeBin } from 'ffprobe-static';
 import {FFmpeggy} from 'ffmpeggy';

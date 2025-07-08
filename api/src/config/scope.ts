@@ -1,3 +1,3 @@
 export const SCOPE = {
-  PROCESS_IAS_MEDIA_ITEM: 'PROCESS_IAS_MEDIA_ITEM',
+  IAS_MEDIA_API: 'ias-media-api',
 };
